@@ -1,148 +1,163 @@
-# Customer Churn Prediction
+# Customer Segmentation using Clustering
 
 ## Project Overview
 
-This project focuses on predicting **customer churn** for a telecom company using advanced data analysis and machine learning techniques. The objective is to proactively identify customers likely to leave, allowing the company to implement retention strategies and reduce revenue loss.
+The objective of this project is to segment customers based on their purchasing behavior using RFM (Recency, Frequency, Monetary Value) analysis and clustering algorithms. Customer segmentation enables businesses to develop targeted marketing strategies, personalized campaigns, and improve customer retention.
 
-The project covers the full pipeline from **data exploration** and **feature engineering** to **model building, evaluation**, and **customer segmentation**.
+**Key Goals:**
 
----
-
-## Objective
-
-* Develop a predictive model to identify customers likely to churn.
-* Understand the key drivers of churn using RFM and clustering analysis.
-* Provide actionable business insights for customer retention strategies.
+* Understand customer purchasing behavior.
+* Group customers into meaningful segments.
+* Provide actionable recommendations for marketing strategies.
 
 ---
 
 ## Dataset
 
-A mock telecom customer dataset was generated for this project with the following attributes:
+**Mock Transaction Data** was generated for 500 customers and 5000 transactions.
 
-* **CustomerID** – Unique customer identifier
-* **Demographics:** Gender, SeniorCitizen, Partner, Dependents
-* **Account Information:** Tenure, Contract, PaymentMethod, PaperlessBilling
-* **Services:** PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies
-* **Billing:** MonthlyCharges, TotalCharges
-* **Target Variable:** Churn (Yes/No)
+**Columns:**
 
-Dataset contains **2000 simulated customer records** with realistic distributions of churn behavior.
+| Column          | Description                   |
+| --------------- | ----------------------------- |
+| TransactionID   | Unique transaction identifier |
+| CustomerID      | Unique customer identifier    |
+| TransactionDate | Date of transaction           |
+| ProductID       | Purchased product identifier  |
+| Quantity        | Number of items purchased     |
+| UnitPrice       | Price per item                |
+| TotalPrice      | Quantity × UnitPrice          |
 
----
+**Sample Data Preview:**
 
-## Tools & Libraries
-
-* **Python**: pandas, numpy, matplotlib, seaborn, scikit-learn
-* **Machine Learning**: Logistic Regression, Random Forest, Gradient Boosting, KMeans Clustering
-* **Data Visualization**: matplotlib, seaborn
-* **Presentation**: python-pptx (PowerPoint report)
-
----
-
-## Steps / Methodology
-
-### 1. Data Exploration and Cleaning
-
-* Loaded and inspected the dataset.
-* Checked for missing values and handled inconsistencies (`No internet service`, `No phone service`).
-* Performed basic descriptive statistics and outlier detection.
-
-### 2. Feature Engineering
-
-* Created additional features such as **tenure in years**, **average monthly charges**, and **total spend**.
-* Encoded categorical variables for model training.
-
-### 3. RFM Analysis & Customer Segmentation
-
-* Calculated **Recency, Frequency, Monetary (RFM)** metrics for each customer.
-* Applied **log transformation** and **standard scaling** to normalize RFM values.
-* Used **KMeans clustering** to identify 4 distinct customer segments:
-
-  1. Loyal High Spenders
-  2. At-Risk Low Spenders
-  3. Potential Loyalists
-  4. New Customers
-* Visualized clusters using **PCA 2D projections**.
-
-### 4. Model Building & Training
-
-* Split dataset into **training** and **testing** sets.
-* Trained multiple classifiers:
-
-  * Logistic Regression
-  * Random Forest
-  * Gradient Boosting
-* Performed **hyperparameter tuning** for optimal performance.
-
-### 5. Model Evaluation
-
-* Evaluated models using:
-
-  * Accuracy
-  * Precision
-  * Recall
-  * F1-Score
-  * ROC-AUC
-* Identified **key drivers of churn** using feature importance from the best model.
-
-### 6. Reporting & Presentation
-
-* Saved segmented customer data as `customer_segments.csv`.
-* Prepared a **PowerPoint report** summarizing:
-
-  * RFM analysis
-  * Clustering results
-  * Model performance
-  * Actionable recommendations for business
+| TransactionID | CustomerID | TransactionDate | ProductID | Quantity | UnitPrice | TotalPrice |
+| ------------- | ---------- | --------------- | --------- | -------- | --------- | ---------- |
+| TRX50000_0    | CUST1302   | 2022-01-12      | Prod_107  | 3        | 53.74     | 161.22     |
+| TRX50001_1    | CUST1267   | 2023-10-17      | Prod_109  | 3        | 312.02    | 936.06     |
 
 ---
 
-## Results
+## Project Steps
 
-### RFM Segments
+### 1. Data Loading & Preparation
 
-| Segment              | Recency | Frequency | Monetary Value | Customer Count |
-| -------------------- | ------- | --------- | -------------- | -------------- |
-| Loyal High Spenders  | 79.35   | 35.96     | 9347.92        | 213            |
-| Potential Loyalists  | 8.02    | 31.29     | 6638.69        | 95             |
-| New Customers        | 116.14  | 17.24     | 3625.30        | 96             |
-| At-Risk Low Spenders | 71.28   | 29.75     | 1768.45        | 96             |
+* Loaded mock customer transaction data.
+* Checked for missing values and data types.
+* Created `TotalPrice` column and converted `TransactionDate` to datetime format.
+* Detected outliers using boxplots.
 
-### Key Insights
+### 2. RFM Analysis
 
-* **High spenders with recent activity** are the most loyal.
-* **Customers with low engagement and low monetary value** are at risk of churn.
-* Targeted campaigns for **at-risk and new customers** can improve retention.
+* Calculated **Recency**: Days since last purchase.
+* Calculated **Frequency**: Number of transactions per customer.
+* Calculated **Monetary Value**: Total spend per customer.
+* Aggregated metrics at customer level to form the RFM table.
 
-### Deliverables
+**Snapshot Date Used:** 2023-12-31
 
-* **Jupyter Notebook** with full code and analysis.
-* **Trained predictive models** (`.pkl` files).
-* **PowerPoint presentation** summarizing findings: `/content/Customer_Segmentation_Report.pptx`.
-* **Segmented customer CSV**: `customer_segments.csv`.
+**Sample RFM Table:**
 
----
-
-## Recommendations
-
-1. Reward **Loyal High Spenders** with exclusive offers and loyalty programs.
-2. Launch **personalized campaigns** to reactivate **at-risk customers**.
-3. Encourage **new customers** to upgrade services through targeted promotions.
-4. Focus on improving **online security and tech support** as they influence churn.
+| CustomerID | Recency | Frequency | MonetaryValue |
+| ---------- | ------- | --------- | ------------- |
+| CUST1000   | 9       | 41        | 6855.79       |
+| CUST1001   | 49      | 10        | 2856.43       |
 
 ---
 
-## Project Duration
+### 3. Exploratory Data Analysis (EDA)
 
-Estimated 40 hours:
-
-| Task                                     | Hours |
-| ---------------------------------------- | ----- |
-| Data Understanding & EDA                 | 8     |
-| Data Preprocessing & Feature Engineering | 10    |
-| Model Building & Training                | 12    |
-| Model Evaluation & Interpretation        | 6     |
-| Documentation & Presentation             | 4     |
+* Plotted distributions of RFM features.
+* Applied **log transformation** to reduce skewness.
+* Standardized features using **StandardScaler** for clustering.
 
 ---
+
+### 4. Customer Segmentation (Clustering)
+
+* Applied **K-Means clustering**.
+* Used **Elbow Method** and **Silhouette Score** to determine optimal number of clusters (k=4).
+* Clusters assigned to customers and analyzed.
+
+**Clusters Identified:**
+
+| Cluster | Segment Name         |
+| ------- | -------------------- |
+| 0       | At-Risk Low Spenders |
+| 1       | Loyal High Spenders  |
+| 2       | Potential Loyalists  |
+| 3       | New Customers        |
+
+---
+
+### 5. Segment Profiling
+
+Analyzed average RFM values per cluster:
+
+| Cluster | Recency | Frequency | MonetaryValue | CustomerCount |
+| ------- | ------- | --------- | ------------- | ------------- |
+| 1       | 79.35   | 35.96     | 9347.92       | 213           |
+| 2       | 8.02    | 31.29     | 6638.69       | 95            |
+| 3       | 116.14  | 17.24     | 3625.30       | 96            |
+| 0       | 71.28   | 29.75     | 1768.45       | 96            |
+
+* **Loyal High Spenders**: High frequency & monetary value, moderate recency.
+* **Potential Loyalists**: Recent buyers with good spend, possible growth segment.
+* **New Customers**: Low frequency, moderate spend, high recency.
+* **At-Risk Low Spenders**: Low engagement and spend, potential churn risk.
+
+---
+
+### 6. Visualization
+
+* Distribution plots for Recency, Frequency, Monetary Value.
+* Pairplot for RFM features by segment.
+* 2D PCA projection of clusters for visualization.
+
+---
+
+### 7. Recommendations
+
+* **Reward loyal customers** with exclusive offers and loyalty programs.
+* **Re-engage at-risk customers** with targeted campaigns.
+* **Nurture potential loyalists** to increase spending.
+* **Guide new customers** with onboarding campaigns and promotions.
+
+---
+
+### 8. Deliverables
+
+1. **Jupyter Notebook**: Contains all code for data preprocessing, RFM calculation, EDA, clustering, and segment profiling.
+2. **CSV File**: `customer_segments.csv` with `CustomerID` and assigned `Segment`.
+3. **PowerPoint Report**: `Customer_Segmentation_Report.pptx` summarizing methodology, clusters, visualizations, and recommendations.
+
+---
+
+### 9. Tools & Libraries
+
+* Python 3.x
+* Libraries: `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `python-pptx`
+* Clustering: K-Means
+* Feature Scaling: StandardScaler
+* Dimensionality Reduction: PCA
+
+---
+
+### 10. Estimated Time Allocation
+
+| Task                                       | Hours |
+| ------------------------------------------ | ----- |
+| Data Understanding & RFM Calculation       | 10    |
+| EDA & Feature Scaling                      | 8     |
+| Clustering Algorithm Selection & Execution | 12    |
+| Segment Profiling & Interpretation         | 6     |
+| Documentation & Presentation               | 4     |
+| **Total**                                  | 40    |
+
+---
+
+### Conclusion
+
+This project successfully segmented customers into meaningful clusters using RFM analysis and K-Means clustering. The segments provide actionable insights for targeted marketing campaigns, helping businesses maximize revenue and customer retention.
+
+
+Do you want me to generate it as a **`README.md` file with all tables and formatting ready**?
