@@ -1,4 +1,4 @@
-# Customer Segmentation using Clustering
+# Customer Segmentation Using Clustering
 
 ## Project Overview
 
